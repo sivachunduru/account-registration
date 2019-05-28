@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Account Easy</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+.row.content {
+	height: 565px
+}
+
+/* Set gray background color and 100% height */
+.sidenav {
+	background-color: #f1f1f1;
+	height: 100%;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+	background-color: #555;
+	color: white;
+	padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+	.sidenav {
+		height: auto;
+		padding: 15px;
+	}
+	.row.content {
+		height: auto;
+	}
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+	bottom: .2em;
+}
+</style>
+<script>
+	$(document).ready(function () {
+		$('#myTable').DataTable({
+		"scrollY": "190px",
+		"scrollCollapse": true,
+		"paging": false
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+	
+	function confirmDelete() {
+		if (confirm("Are your sure to delete?")) 
+			return true; 
+		else 
+			return false;
+	}
+</script>
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-3 sidenav">
+				<h4></h4>
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href="/">Home</a></li>
+					<li class="active"><a href="/accounts">Accounts</a></li>
+				</ul>
+				<br>
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search..">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-sm-9">
+				<h2>
+					Pacify<span class="text-primary">CRM</span>
+				</h2>
+				<h4>Extending Force.com data to Heroku</h4>
+				<br />
+				<div align="right">
+					<button type="button" class="btn btn-default"
+						onclick="javascript:window.location.href='/createaccountform'">Create
+						New Account</button>
+				</div>
+				<br/>
+					<table id="myTable"
+						class="table table-striped table-bordered table-sm">
+						<thead>
+							<tr>
+								<th class="th-sm">S.No.</th>
+								<th class="th-sm">Id</th>
+								<th class="th-sm">Name</th>
+								<th class="th-sm">Phone</th>
+								<th class="th-sm">Ownership</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="account : ${accounts}">
+								<td th:text="${account.id}"></td>
+								<td th:text="${account.sfid}"></td>
+								<td th:text="${account.name}"></td>
+								<td th:text="${account.phone}"></td>
+								<td th:text="${account.ownership}"></td>
+								<td>
+									<a href="/updateaccountform/1" th:href="@{/updateaccountform/__${account.id}__}">Edit</a>
+									&nbsp;&nbsp;
+									<a href="/deleteaccount/1" th:href="@{/deleteaccount/__${account.id}__}" onclick="javascript:return confirmDelete();">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>S.No.</th>
+								<th>Id</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Ownership</th>
+								<th></th>
+							</tr>
+						  </tfoot>
+					</table>
+				<br>
+				<br>
+
+			</div>
+		</div>
+	</div>
+
+	<footer class="container-fluid">
+		<p>All rights reserved by AccountEasy. Powered by Heroku.</p>
+	</footer>
+
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Account Easy</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<style>
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+.row.content {
+	height: 565px
+}
+
+/* Set gray background color and 100% height */
+.sidenav {
+	background-color: #f1f1f1;
+	height: 100%;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+	background-color: #555;
+	color: white;
+	padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+	.sidenav {
+		height: auto;
+		padding: 15px;
+	}
+	.row.content {
+		height: auto;
+	}
+}
+</style>
+</head>
+<body>
+
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-3 sidenav">
+				<h4></h4>
+				<ul class="nav nav-pills nav-stacked">
+					<li><a href="/">Home</a></li>
+					<li class="active"><a href="/accounts">Accounts</a></li>
+				</ul>
+				<br>
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search..">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-sm-9">
+				<h2>
+					Pacify<span class="text-primary">CRM</span>
+				</h2>
+				<h4>Extending Force.com data to Heroku</h4>
+				<br />
+				<br/>
+				<h4>Update Account</h4>
+				<br/>
+					<form action="#" th:action="@{/updateaccount}" th:object="${account}"
+						method="post">
+						<table style="width:450px;" id="myTable" class="table table-striped table-bordered table-sm">
+							<tr>
+								<th width="150px">Name:</th>
+								<td width="300px">
+									<input id="id" type="hidden" th:field="*{id}" />
+									<input id="name" class="form-control" type="text" th:field="*{name}" />
+								</td>
+							</tr>
+							<tr>
+								<th>Phone:</th>
+								<td><input id="phone" type="text" class="form-control" th:field="*{phone}" /></td>
+							</tr>
+							<tr>
+								<th>Ownership:</th>
+								<td><select id="ownership" class="form-control" th:field="*{ownership}">
+										<option value="Public">Public</option>
+										<option value="Private">Private</option>
+										<option value="Subsidiary">Subsidiary</option>
+										<option value="Other">Other</option>
+								</select></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<button type="submit" class="btn btn-primary">Submit</button>
+									&nbsp;&nbsp; 
+									<button type="reset" class="btn btn-warning">Reset</button>
+									&nbsp;&nbsp; 
+									<button type="button" class="btn btn-info" onclick="javascript:window.location.href='/accounts'">Cancel</button>
+								</td>
+							</tr>
+			
+						</table>
+					</form>
+			</div>
+		</div>
+	</div>
+
+	<footer class="container-fluid">
+		<p>All rights reserved by AccountEasy. Powered by Heroku.</p>
+	</footer>
+
+</body>
+</html>
