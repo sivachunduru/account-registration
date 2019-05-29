@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -59,6 +60,7 @@ public class AccountController {
 		ResultSet rs = null;
 		try {
 			connection = getDataSource().getConnection();
+//			connection = getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "SELECT id, sfid, name, phone, ownership FROM salesforce.account";
@@ -98,6 +100,7 @@ public class AccountController {
 		Statement stmt = null;
 		try {
 			connection = getDataSource().getConnection();
+//			connection = getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "insert into salesforce.account(name, phone, ownership) values " + "('" + name + "', '" + phone
@@ -126,6 +129,7 @@ public class AccountController {
 		ResultSet rs = null;
 		try {
 			connection = getDataSource().getConnection();
+//			connection = getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "SELECT id, sfid, name, phone, ownership FROM salesforce.account where id="+id;
@@ -165,6 +169,7 @@ public class AccountController {
 		Statement stmt = null;
 		try {
 			connection = getDataSource().getConnection();
+//			connection = getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "update salesforce.account set name = '"+name+"', phone = '"+phone+"', ownership = '"+ownership+"' where id="+id;
@@ -191,6 +196,7 @@ public class AccountController {
 		Statement stmt = null;
 		try {
 			connection = getDataSource().getConnection();
+//			connection = getConnection();
 			stmt = connection.createStatement();
 			String sql = "DELETE FROM salesforce.account where id="+id;
 			stmt.executeUpdate(sql);
@@ -207,7 +213,7 @@ public class AccountController {
 		return accounts(model);
 	}
 
-//	@Bean
+	@Bean
 	public DataSource getDataSource() throws SQLException, URISyntaxException {
 		System.out.println("dbUrl: "+dbUrl);
 		if (dataSource == null) {
@@ -229,4 +235,16 @@ public class AccountController {
 		}
 		return dataSource;
 	}
+
+	/*
+	private static Connection getConnection() throws URISyntaxException, SQLException {
+	    URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+	    String username = dbUri.getUserInfo().split(":")[0];
+	    String password = dbUri.getUserInfo().split(":")[1];
+	    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+
+	    return DriverManager.getConnection(dbUrl, username, password);
+	}
+	*/
 }
