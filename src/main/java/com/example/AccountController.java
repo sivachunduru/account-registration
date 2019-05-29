@@ -213,7 +213,7 @@ public class AccountController {
 		return accounts(model);
 	}
 
-	@Bean
+	//@Bean
 	public DataSource getDataSource() throws SQLException, URISyntaxException {
 		System.out.println("dbUrl: "+dbUrl);
 		if (dataSource == null) {
