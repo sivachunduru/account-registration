@@ -2,48 +2,26 @@ package com.example;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
-
-@Entity
-@Table(name = "account", schema = "salesforce")
 public class Account {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	private String sfid;
 
-	@Column(name = "name")
-	@NotBlank(message = "Name is mandatory")
 	private String name;
 	 
-	@Column(name = "phone")
-	@NotBlank(message = "Phone is mandatory")
 	private String phone;
 	 
-	@Column(name = "ownership")
-	@NotBlank(message = "Ownership is mandatory")
 	private String ownership;
 	
-	@Column(name="createddate", insertable=true)
-    @Temporal(TemporalType.TIMESTAMP)
 	private Date createdDate;
 
 	public Account() {
 	}
 
-	public Account(long id, String sfid, @NotBlank(message = "Name is mandatory") String name,
-			@NotBlank(message = "Phone is mandatory") String phone,
-			@NotBlank(message = "Ownership is mandatory") String ownership) {
+	public Account(long id, String sfid, String name,
+			String phone,
+			String ownership) {
 		super();
 		this.id = id;
 		this.sfid = sfid;
@@ -105,5 +83,4 @@ public class Account {
 		return "Account [id=" + id + ", sfid=" + sfid + ", name=" + name + ", phone=" + phone + ", ownership="
 				+ ownership + ", createdDate=" + createdDate + "]";
 	}
-
 }
