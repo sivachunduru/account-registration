@@ -1,6 +1,5 @@
 package com.example;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,6 +12,7 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
@@ -33,18 +33,13 @@ public class AccountController {
 	@Value("${spring.datasource.url}")
 	private String dbUrl;
 
-//	@Autowired
+	@Autowired
 	private DataSource dataSource;
 	
 	@RequestMapping("/")
 	public String index(Model model) {
 		return "index";
 	}
-
-//	@RequestMapping("/account")
-//	public String home(Model model) {
-//		return "home";
-//	}
 
 	@RequestMapping("/createaccountform")
 	public String createAccountForm(Model model) {
@@ -59,8 +54,7 @@ public class AccountController {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			connection = getDataSource().getConnection();
-//			connection = getConnection();
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "SELECT id, sfid, name, phone, ownership FROM salesforce.account";
@@ -92,15 +86,13 @@ public class AccountController {
 
 	@RequestMapping(value = "/createaccount", method = RequestMethod.POST)
 	public String createAccount(@ModelAttribute Account account, Model model) throws SQLException {
-//		long id = account.getId();
 		String name = account.getName();
 		String phone = account.getPhone();
 		String ownership = account.getOwnership();
 		Connection connection = null;
 		Statement stmt = null;
 		try {
-			connection = getDataSource().getConnection();
-//			connection = getConnection();
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "insert into salesforce.account(name, phone, ownership) values " + "('" + name + "', '" + phone
@@ -119,7 +111,6 @@ public class AccountController {
 				connection.close();
 		}
 		return "result";
-//		return "accounts";
 	}
 	
 	@RequestMapping(value = "/updateaccountform/{id}", method = RequestMethod.GET)
@@ -128,8 +119,7 @@ public class AccountController {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			connection = getDataSource().getConnection();
-//			connection = getConnection();
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "SELECT id, sfid, name, phone, ownership FROM salesforce.account where id="+id;
@@ -168,8 +158,7 @@ public class AccountController {
 		Connection connection = null;
 		Statement stmt = null;
 		try {
-			connection = getDataSource().getConnection();
-//			connection = getConnection();
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			String sql;
 			sql = "update salesforce.account set name = '"+name+"', phone = '"+phone+"', ownership = '"+ownership+"' where id="+id;
@@ -187,7 +176,6 @@ public class AccountController {
 				connection.close();
 		}
 		return "result";
-//		return "accounts";
 	}
 	
 	@RequestMapping(value = "/deleteaccount/{id}", method = RequestMethod.GET)
@@ -195,8 +183,7 @@ public class AccountController {
 		Connection connection = null;
 		Statement stmt = null;
 		try {
-			connection = getDataSource().getConnection();
-//			connection = getConnection();
+			connection = dataSource.getConnection();
 			stmt = connection.createStatement();
 			String sql = "DELETE FROM salesforce.account where id="+id;
 			stmt.executeUpdate(sql);
@@ -213,38 +200,15 @@ public class AccountController {
 		return accounts(model);
 	}
 
-	//@Bean
-	public DataSource getDataSource() throws SQLException, URISyntaxException {
+	@Bean
+	public DataSource dataSource() throws SQLException, URISyntaxException {
 		System.out.println("dbUrl: "+dbUrl);
-		if (dataSource == null) {
-			if (dbUrl == null || dbUrl.isEmpty()) {
-				dataSource = new HikariDataSource();
-			} else {
-				HikariConfig config = new HikariConfig();
-				
-				URI dbUri = new URI(dbUrl);
-				String username = dbUri.getUserInfo().split(":")[0];
-			    String password = dbUri.getUserInfo().split(":")[1];
-			    String newDbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-				
-				config.setJdbcUrl(newDbUrl);
-				config.setUsername(username);
-				config.setPassword(password);
-				dataSource = new HikariDataSource(config);
-			}
-		}
-		return dataSource;
+		if (dbUrl == null || dbUrl.isEmpty()) {
+		      return new HikariDataSource();
+		} else {
+		      HikariConfig config = new HikariConfig();
+		      config.setJdbcUrl(dbUrl);
+		      return new HikariDataSource(config);
+	    }
 	}
-
-	/*
-	private static Connection getConnection() throws URISyntaxException, SQLException {
-	    URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-	    String username = dbUri.getUserInfo().split(":")[0];
-	    String password = dbUri.getUserInfo().split(":")[1];
-	    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-
-	    return DriverManager.getConnection(dbUrl, username, password);
-	}
-	*/
 }
